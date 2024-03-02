@@ -11,12 +11,14 @@ export const getAllItems = createAsyncThunk(
         limit: 12,
         page,
       });
+      console.log(controller);
       const response = await axios.get(`/advert?${params}`, {
         signal: controller.signal,
       });
       // console.log(response);
       return response.data;
     } catch (e) {
+      console.log(e);
       return thunkAPI.rejectWithValue(e.message);
     }
   }

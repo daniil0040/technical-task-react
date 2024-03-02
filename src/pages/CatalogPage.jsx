@@ -12,10 +12,10 @@ export default function CatalogPage() {
 
   useEffect(() => {
     const controller = new AbortController();
+    console.log(controller);
 
     dispatch(getAllItems(currentPage, controller));
     return () => {
-      // console.log(controller.abort());
       controller.abort();
     };
   }, [dispatch, currentPage]);
