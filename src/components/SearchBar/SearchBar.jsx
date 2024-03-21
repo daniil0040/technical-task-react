@@ -98,6 +98,12 @@ export const SearchBar = () => {
     return { value: price, label: price };
   });
 
+  const defaultSelectValue = (options, value) => {
+    return options
+      ? options.find(option => option.value === value)
+      : { value: '', label: '' };
+  };
+
   const formik = useFormik({
     initialValues: {
       carBrand: '',
@@ -107,10 +113,11 @@ export const SearchBar = () => {
     },
     onSubmit: values => {
       dispatch(setFilters(values));
-      formik.resetForm();
+      // console.log(values);
     },
     validationSchema: SignupSchema,
   });
+
   return (
     <StyledFormEl onSubmit={formik.handleSubmit}>
       <StyledLabelEl>
@@ -122,8 +129,12 @@ export const SearchBar = () => {
             formik.setFieldValue('carBrand', selectedOption.value);
           }}
           placeholder={'Brand'}
-          styles={{ ...selectStyles }}
+          styles={selectStyles}
           className={'brand'}
+          value={defaultSelectValue(
+            carBrandsSelectOptions,
+            formik.values.carBrand
+          )}
         />
       </StyledLabelEl>
       <StyledLabelEl>
@@ -147,17 +158,22 @@ export const SearchBar = () => {
             name="mileageMin"
             placeholder="From"
             onChange={formik.handleChange}
+            value={defaultSelectValue(
+              carBrandsSelectOptions,
+              formik.values.price
+            )}
           />
           <StyledToInput
             type="number"
             name="mileageMax"
             placeholder="To"
             onChange={formik.handleChange}
+            value={formik.values.mileageMax}
           />
         </div>
       </StyledLabelEl>
       <StyledFormBtn type="submit">Search</StyledFormBtn>
-      <StyledFormBtn type="button" onClick={() => handleResetFilters()}>
+      <StyledFormBtn type="button" onClick={handleResetFilters}>
         Reset filters
       </StyledFormBtn>
     </StyledFormEl>
