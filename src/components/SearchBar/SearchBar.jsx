@@ -26,8 +26,8 @@ const SignupSchema = Yup.object().shape({
 });
 
 const selectStyles = {
-  placeholder: base => ({
-    ...base,
+  placeholder: baseStyles => ({
+    ...baseStyles,
     color: 'rgb(18, 20, 23)',
     fontFamily: 'Manrope',
     fontSize: '18px',
@@ -49,9 +49,9 @@ const selectStyles = {
       borderColor: '#3470ff',
     },
   }),
-  option: styles => {
+  option: baseStyles => {
     return {
-      ...styles,
+      ...baseStyles,
       color: 'rgb(18, 20, 23)',
       fontFamily: 'Manrope',
       fontSize: '18px',
@@ -61,8 +61,8 @@ const selectStyles = {
       textAlign: 'left',
     };
   },
-  singleValue: styles => ({
-    ...styles,
+  singleValue: baseStyles => ({
+    ...baseStyles,
     color: 'rgb(18, 20, 23)',
     fontFamily: 'Manrope',
     fontSize: '18px',
