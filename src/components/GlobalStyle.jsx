@@ -50,4 +50,8 @@ ul {
   padding: 0;
   list-style: none;
 }
+
+main{
+  width: 100%;
+}
 `;

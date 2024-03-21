@@ -7,12 +7,13 @@ export const LayoutContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-bottom: 100px;
 `;
 
 export const Layout = () => {
   return (
     <LayoutContainer
-      style={{ maxWidth: 1440, margin: '0 auto', padding: '0 129px' }}
+      style={{ maxWidth: 1440, margin: '0 auto', padding: '150px 129px' }}
     >
       <AppBar />
       <Suspense fallback={null}>

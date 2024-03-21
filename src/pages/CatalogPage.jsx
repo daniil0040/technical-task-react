@@ -1,22 +1,31 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllItems } from '../redux/advert/advertOperations';
-import { selectError, selectIsLoading } from '../redux/advert/advertSelectors';
+import {
+  getAllItems,
+  getAllItemsPerPage,
+} from '../redux/advert/advertOperations';
+import {
+  selectError,
+  selectIsLoading,
+  selectVisibleItems,
+} from '../redux/advert/advertSelectors';
 import { ItemsList } from 'components/ItemsList/ItemsList';
+import { LoadMoreBtn } from './CatalogPage.styled';
+import { SearchBar } from 'components/SearchBar/SearchBar';
+import { constants } from 'helpers';
 
 export default function CatalogPage() {
   const dispatch = useDispatch();
   const isLoading = useSelector(selectIsLoading);
+  const visibleItems = useSelector(selectVisibleItems);
   const error = useSelector(selectError);
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    const controller = new AbortController();
-    console.log(controller);
-
-    dispatch(getAllItems(currentPage, controller));
+    dispatch(getAllItems());
+    const allItemsPerPage = dispatch(getAllItemsPerPage(currentPage));
     return () => {
-      controller.abort();
+      allItemsPerPage?.abort();
     };
   }, [dispatch, currentPage]);
 
@@ -25,16 +34,22 @@ export default function CatalogPage() {
   };
   return (
     <main>
+      {isLoading && <div>Loading...</div>}
       {error ? (
         <div>Something went wrong. Try reload page!</div>
-      ) : isLoading ? (
-        <div>Loading...</div>
       ) : (
         <>
+          <SearchBar />
           <ItemsList />
-          <button type="button" onClick={handleLoadMore}>
-            Load more
-          </button>
+          {visibleItems.length === currentPage * constants.ITEMS_PER_PAGE && (
+            <LoadMoreBtn
+              type="button"
+              onClick={handleLoadMore}
+              disabled={isLoading}
+            >
+              Load more
+            </LoadMoreBtn>
+          )}
         </>
       )}
     </main>

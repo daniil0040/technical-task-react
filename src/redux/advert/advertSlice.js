@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getAllItems } from './advertOperations';
+import { getAllItems, getAllItemsPerPage } from './advertOperations';
 
 const handlePending = state => {
   state.cars.isLoading = true;
@@ -13,24 +13,46 @@ const advertSlice = createSlice({
   name: 'advert',
   initialState: {
     cars: {
-      items: [],
+      visibleItems: [],
+      allItems: [],
       isLoading: false,
       error: null,
     },
-    filter: '',
+    filters: {
+      carBrand: '',
+      price: '',
+      mileageMin: '',
+      mileageMax: '',
+    },
   },
-  reducers: {},
+  reducers: {
+    setFilters(state, action) {
+      state.filters = action.payload;
+    },
+    resetFilters(state) {
+      state.filters = {
+        carBrand: '',
+        price: '',
+        mileageMin: '',
+        mileageMax: '',
+      };
+    },
+  },
   extraReducers: builder => {
     builder
+      .addCase(getAllItemsPerPage.pending, handlePending)
+      .addCase(getAllItemsPerPage.fulfilled, (state, action) => {
+        state.cars.visibleItems = [
+          ...state.cars.visibleItems,
+          ...action.payload,
+        ];
+        state.cars.isLoading = false;
+        state.cars.error = null;
+      })
+      .addCase(getAllItemsPerPage.rejected, handleRejected)
       .addCase(getAllItems.pending, handlePending)
       .addCase(getAllItems.fulfilled, (state, action) => {
-        // const uniqueAdverts = action.payload.filter(
-        //   newAdvert =>
-        //     !state.cars.items.some(
-        //       existingAdvert => existingAdvert.id === newAdvert.id
-        //     )
-        // );
-        state.cars.items = [...state.cars.items, ...action.payload];
+        state.cars.allItems = action.payload;
         state.cars.isLoading = false;
         state.cars.error = null;
       })
@@ -39,3 +61,4 @@ const advertSlice = createSlice({
 });
 
 export const advertReduser = advertSlice.reducer;
+export const { setFilters, resetFilters } = advertSlice.actions;

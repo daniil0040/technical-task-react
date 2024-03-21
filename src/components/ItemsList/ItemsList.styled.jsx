@@ -10,8 +10,6 @@ export const ItemsListContainer = styled.ul`
 `;
 
 export const ListItem = styled.li`
-  /* border: 1px solid gray; */
-  margin-bottom: 10px;
   width: calc((100% - 29px * 3) / 4);
   overflow: hidden;
 `;
